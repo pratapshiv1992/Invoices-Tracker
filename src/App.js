@@ -12,16 +12,16 @@ const App = () => (
       <Link to="add-invoice">Add Invoice</Link>
       <Link to="about-developer">About Developer</Link>
       <Switch>
-        <Route path="/" exact componet={<>This is invoice listing. </>} />
+        <Route path="/" exact component={()=><h1><br/> <br/>This is invoice listing. </h1>} />
         <Route
           path="/add-invoice"
           exact
-          componet={() => <>This is add invoice . </>}
+          component={() => <h1><br/> <br/>This is add invoice . </h1>}
         />
         <Route
           path="/about-developer"
           exact
-          componet={() => <>My introduction. </>}
+          component={() => <h1><br/> <br/>My introduction. </h1>}
         />
         <Redirect to="/" />
       </Switch>
