@@ -1,34 +1,24 @@
 import React from 'react';
+import Navbar from './Navbar'
+
 import { 
     Route,
-    Link,
     Switch,
     Redirect,
 } from 'react-router-dom';
 
-const App = () => (
+
+const MyComponent  = (props) =><h1><br/> <br/>{props.text}</h1>
+const App = (props) => (
     <>
-      <Link to="/">Invoice Listing</Link>
-      <Link to="add-invoice">Add Invoice</Link>
-      <Link to="about-developer">About Developer</Link>
+      <Navbar />
       <Switch>
-        <Route path="/" exact component={()=><h1><br/> <br/>This is invoice listing. </h1>} />
-        <Route
-          path="/add-invoice"
-          exact
-          component={() => <h1><br/> <br/>This is add invoice . </h1>}
-        />
-        <Route
-          path="/about-developer"
-          exact
-          component={() => <h1><br/> <br/>My introduction. </h1>}
-        />
+        <Route path='/' exact component={(props)=> <MyComponent text=" Invoice Listing" {...props} />} />
+        <Route path='/add-invoice' exact component={(props)=> <MyComponent text="Add Invoice" {...props} />}  />
+        <Route path='/about-developer' exact component={(props)=> <MyComponent text="Developer Introduction" {...props} />} />
         <Redirect to="/" />
       </Switch>
     </>
   );
   
-  
-
-
 export default App;
