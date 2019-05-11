@@ -1,5 +1,6 @@
 import React from 'react';
 import Navbar from './Navbar'
+import InvoiceTable from './InvoiceTable'
 
 import { 
     Route,
@@ -13,7 +14,7 @@ const App = (props) => (
     <>
       <Navbar />
       <Switch>
-        <Route path='/' exact component={(props)=> <MyComponent text=" Invoice Listing" {...props} />} />
+        <Route path='/' exact component={(props)=> <InvoiceTable text=" Invoice Listing" {...props} />} />
         <Route path='/add-invoice' exact component={(props)=> <MyComponent text="Add Invoice" {...props} />}  />
         <Route path='/about-developer' exact component={(props)=> <MyComponent text="Developer Introduction" {...props} />} />
         <Redirect to="/" />

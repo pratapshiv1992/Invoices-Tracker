@@ -72,7 +72,7 @@ const AllLinks = ({classes})=>{
 const Navbar = ({classes})=> {
     return (
         <div className={classes.root}>
-            <AppBar position="static" color="secondary" >
+            <AppBar position="relative" color="secondary" >
                 <Toolbar  >
                     <IconButton onClick={()=>alert('Menu button clicked')} className={classes.menuButton} color="inherit" aria-label="Menu">
                         <MenuIcon />
