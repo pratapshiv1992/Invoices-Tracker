@@ -1,3 +1,4 @@
+import {db } from './firestore';
 export const getFormattedDate = (date,format) => {
     var d = new Date(date),
         month = '' + (d.getMonth() + 1),
@@ -24,4 +25,8 @@ export const checkInteger = (value) => {
   }else{
       return false;
   }
+}
+
+export const addInCollection = (collection,data)=>{
+db.collection(collection).add(data);
 }

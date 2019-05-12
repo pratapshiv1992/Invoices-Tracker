@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { getFormattedDate , checkInteger} from './utils';
+import { getFormattedDate , checkInteger,addInCollection } from './utils';
 
 const styles = theme => ({
   root: {
@@ -56,12 +56,16 @@ const integerValues = [
     "invoiceAmount"
 ];
 
-class OutlinedInputAdornments extends React.Component {
-  state = {
+const defaults = {
     cutomerName:'',
     phone: '',
     invoiceAmount: '',
     invoiceStatus: '', 
+}
+
+class OutlinedInputAdornments extends React.Component {
+  state = {
+    ...defaults,
     disableFields:this.props.disableFields ? true : false,
   };
 
@@ -80,6 +84,14 @@ class OutlinedInputAdornments extends React.Component {
             });
         }
     };
+
+    handleSubmmit = (e)=>{
+       addInCollection('invoices',this.state);
+        this.setState({
+            ...defaults,
+        });
+        alert('Invoice added succesfully, check it in the invoice list');
+    }
 
     
 
@@ -171,7 +183,7 @@ class OutlinedInputAdornments extends React.Component {
         disabled={disableFields}
         fullWidth
       />
-        <Button fullWidth variant="contained" color="primary" className={classes.button}>
+        <Button fullWidth variant="contained" color="primary" className={classes.button} onClick={this.handleSubmmit} >
             ADD
         </Button>
         </form>
