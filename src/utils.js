@@ -32,5 +32,9 @@ db.collection(collection).add(data);
 }
 
 export const readCollection = (collection)=>{
-return db.collection(collection)//.onSnapshot(snap=>snap);
+return db.collection(collection)
+}
+
+export const getDocument = (collection,id)=>{
+    return db.collection(collection).doc(id)
 }

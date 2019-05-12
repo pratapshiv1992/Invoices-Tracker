@@ -186,11 +186,16 @@ class InvoiceTable extends React.PureComponent {
   
   componentDidMount(){
     readCollection('invoices').onSnapshot(snap => {
-      const dataArray = snap.docs.map(x =>({...x.data() }));
+      const dataArray = snap.docs.map(x =>({...x.data(),id:x.id}));
       this.setState({
         invoiceList:dataArray
       });  
       })
+  }
+
+  modifyInvoice = (e)=>{
+    const { history:{push}} = this.props;
+    push(`/edit-invoice/${e.rowData.id}`);
   }
 
   render(){
@@ -200,7 +205,7 @@ class InvoiceTable extends React.PureComponent {
         <CreateTable
           rowCount={invoiceList.length}
           rowGetter={({ index }) => invoiceList[index]}
-          onRowClick={event => console.log(event)}
+          onRowClick={this.modifyInvoice}
           columns={[
             {
               width: 120,

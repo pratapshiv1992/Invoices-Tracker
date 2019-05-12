@@ -17,6 +17,7 @@ const App = (props) => (
       <Switch>
         <Route path='/' exact component={(props)=> <InvoiceTable  {...props} />} />
         <Route path='/add-invoice' exact component={(props)=> <AddInvoice  {...props} />}  />
+        <Route path='/edit-invoice/:id' exact component={(props)=> <AddInvoice editMode={true} {...props} />}  />
         <Route path='/about-developer' exact component={(props)=> <MyComponent text="Developer Introduction" {...props} />} />
         <Redirect to="/" />
       </Switch>

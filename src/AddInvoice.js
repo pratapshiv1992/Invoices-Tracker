@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { getFormattedDate , checkInteger,addInCollection } from './utils';
+import { getFormattedDate , checkInteger,addInCollection ,getDocument } from './utils';
 
 const styles = theme => ({
   root: {
@@ -67,7 +67,7 @@ const defaults = {
 class OutlinedInputAdornments extends React.Component {
   state = {
     ...defaults,
-    disableFields:this.props.disableFields ? true : false,
+    disableFields:false,
   };
 
     handleChange = prop => event => {
@@ -87,24 +87,66 @@ class OutlinedInputAdornments extends React.Component {
     };
 
     handleSubmmit = (e)=>{
-       addInCollection('invoices',this.state);
-        this.setState({
-            ...defaults,
-        });
-        alert('Invoice added succesfully, check it in the invoice list');
+        const invoiceData = this.state;
+        let dataCheck = true;
+        for(let value in invoiceData){
+            if(!value){
+                dataCheck=false;
+            }
+        }
+        if(dataCheck){
+            addInCollection('invoices',this.state);
+            this.setState({
+                ...defaults,
+            });
+            alert('Invoice added succesfully, check it out in the invoice list');
+        }else{
+            alert('Please fill all the fields');
+        }
+       
     }
 
+    goBack = (e)=>{
+        const {history:{ goBack} } = this.props;
+        goBack();
+     }
+
+     deleteInvoice = (e)=>{
+        const {history:{ goBack},match:{params:{id}} } = this.props;
+        getDocument('invoices',id).delete();
+        goBack();
+     }
+
+    componentDidMount(){
+        const { editMode } = this.props;
+        if(editMode){
+            const { match:{params:{id}} } = this.props;
+            getDocument('invoices',id).get().then(snap=>{
+                const document =  {...snap.data(),id:snap.id };
+                this.setState({
+                    ...document,
+                    disableFields:true
+                });
+            });
+            
+        }
+    }
     
 
   render() {
-    const { classes } = this.props;
+    const { classes,editMode} = this.props;
+    
     const { 
         customerName,
         phone,
         invoiceAmount,
         invoiceStatus, 
-        disableFields
+        disableFields,
+        invoiceDate
     } = this.state;
+
+    const dataCheck= customerName && phone && invoiceAmount && invoiceStatus && invoiceDate ? true : false;
+
     return (
       <div className={classes.root}>
       <form className={classes.container} noValidate>
@@ -184,9 +226,13 @@ class OutlinedInputAdornments extends React.Component {
         disabled={disableFields}
         fullWidth
       />
-        <Button fullWidth variant="contained" color="primary" className={classes.button} onClick={this.handleSubmmit} >
-            ADD
+        <Button fullWidth variant="contained" color="primary" className={classes.button} onClick={editMode ? this.deleteInvoice : this.handleSubmmit} disabled = {!dataCheck} >
+            {editMode ? 'DELETE ':'ADD' }
         </Button>
+        <Button fullWidth variant="contained" color="secondary" className={classes.button} onClick={this.goBack} >
+            GO BACK
+        </Button> 
+        
         </form>
       </div>
     );
