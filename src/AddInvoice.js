@@ -57,10 +57,11 @@ const integerValues = [
 ];
 
 const defaults = {
-    cutomerName:'',
+    customerName:'',
     phone: '',
     invoiceAmount: '',
     invoiceStatus: '', 
+    invoiceDate:getFormattedDate(new Date(),'YYYY-MM-DD')
 }
 
 class OutlinedInputAdornments extends React.Component {
@@ -98,7 +99,7 @@ class OutlinedInputAdornments extends React.Component {
   render() {
     const { classes } = this.props;
     const { 
-        cutomerName,
+        customerName,
         phone,
         invoiceAmount,
         invoiceStatus, 
@@ -113,8 +114,8 @@ class OutlinedInputAdornments extends React.Component {
           className={classNames(classes.margin, classes.textField)}
           variant="outlined"
           label="Customer Name"
-          value={cutomerName}
-          onChange={this.handleChange('cutomerName')}
+          value={customerName}
+          onChange={this.handleChange('customerName')}
           InputProps={{
             startAdornment: <InputAdornment position="start">Mr/Mrs</InputAdornment>,
           }}

@@ -30,3 +30,7 @@ export const checkInteger = (value) => {
 export const addInCollection = (collection,data)=>{
 db.collection(collection).add(data);
 }
+
+export const readCollection = (collection)=>{
+return db.collection(collection)//.onSnapshot(snap=>snap);
+}

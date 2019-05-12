@@ -8,6 +8,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
 import { AutoSizer, Column, SortDirection, Table } from "react-virtualized";
+import { readCollection } from './utils'
+
 
 const styles = theme => ({
   table: {
@@ -177,75 +179,64 @@ MyTable.defaultProps = {
 
 const CreateTable = withStyles(styles)(MyTable);
 
-const data = [
-  ["Adam chills", 1159159159, "12/12/18", 23344, "Due"],
-  ["Kevin dew", 1459591345, "11/1/19", 455643, "Paid"],
-  ["Maria dina", 179561565, "09/2/17", 57677, "Due"],
-  ["Sergey Ramos", 55646421, "04/1/19", 86786, "Due"],
-  ["Dino james", 7689959, "23/05/18", 86788, "Paid"]
-];
+class InvoiceTable extends React.PureComponent {
+  state ={
+    invoiceList:[]
+  }
+  
+  componentDidMount(){
+    readCollection('invoices').onSnapshot(snap => {
+      const dataArray = snap.docs.map(x =>({...x.data() }));
+      this.setState({
+        invoiceList:dataArray
+      });  
+      })
+  }
 
-let id = 0;
-function createData(customerName, phone, date, invoiceAmount, status) {
-  id += 1;
-  return { id, customerName, phone, date, invoiceAmount, status };
-}
-
-const rows = [];
-data.forEach(array => {
-  rows.push(createData(...array));
-});
-
-data.forEach(array => {
-  rows.push(createData(...array));
-});
-
-data.forEach(array => {
-  rows.push(createData(...array));
-});
-
-function InvoiceTable() {
-  return (
-    <Paper style={{ height: 600, width: "100%" }}>
-      <CreateTable
-        rowCount={rows.length}
-        rowGetter={({ index }) => rows[index]}
-        onRowClick={event => console.log(event)}
-        columns={[
-          {
-            width: 120,
-            flexGrow: 0.85,
-            label: "Customer Name",
-            dataKey: "customerName"
-          },
-          {
-            width: 120,
-            label: "Phone",
-            dataKey: "phone",
-            numeric: true
-          },
-          {
-            width: 120,
-            label: "Date",
-            dataKey: "date",
-            numeric: true
-          },
-          {
-            width: 120,
-            label: "Invoice Amount",
-            dataKey: "invoiceAmount",
-            numeric: true
-          },
-          {
-            width: 120,
-            label: "Status",
-            dataKey: "status",
-            numeric: true
-          }
-        ]}
-      />
-    </Paper>
-  );
+  render(){
+    const { invoiceList } = this.state;
+    return (
+      <Paper style={{ height: 600, width: "100%" }}>
+        <CreateTable
+          rowCount={invoiceList.length}
+          rowGetter={({ index }) => invoiceList[index]}
+          onRowClick={event => console.log(event)}
+          columns={[
+            {
+              width: 120,
+              flexGrow: 0.85,
+              label: "Customer Name",
+              dataKey: "customerName"
+            },
+            {
+              width: 120,
+              label: "Phone",
+              dataKey: "phone",
+              numeric: true
+            },
+            {
+              width: 120,
+              label: "Invoice Date",
+              dataKey: "invoiceDate",
+              numeric: true
+            },
+            {
+              width: 120,
+              label: "Invoice Amount",
+              dataKey: "invoiceAmount",
+              numeric: true
+            },
+            {
+              width: 120,
+              label: "Invoice Status",
+              dataKey: "invoiceStatus",
+              numeric: true
+            }
+          ]}
+        />
+      </Paper>
+    );
+  }  
 }
 
 export default InvoiceTable;
