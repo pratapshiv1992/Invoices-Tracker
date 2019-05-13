@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/pratapshiv1992/Invoices-Tracker/issues"
   },
-  "homepage": "https://github.com/pratapshiv1992/Invoices-Tracker",
+  "homepage": "https://invoices-tracker.firebaseapp.com/",
   "dependencies": {
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",

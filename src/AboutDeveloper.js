@@ -15,6 +15,7 @@ const styles = theme => ({
 
 const linkedin = 'https://www.linkedin.com/in/pratapshiv1992/';
 const github =   'https://github.com/pratapshiv1992/';
+const repo =   'https://github.com/pratapshiv1992/Invoices-Tracker';
 
 function AboutDeveloper(props) {
   const { classes } = props;
@@ -29,7 +30,10 @@ function AboutDeveloper(props) {
       Github
       </Link>
     </Typography>
-    <Typography>Fork this repository if you like it.</Typography>
+    <Typography>
+        Fork this repository if you like it.
+        <Link href={repo}  className={classes.link}>Click here</Link>
+    </Typography>
     </div>
   );
 }
