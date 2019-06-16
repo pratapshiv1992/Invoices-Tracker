@@ -150,7 +150,7 @@ class OutlinedInputAdornments extends React.Component {
     return (
       <div className={classes.root}>
       <form className={classes.container} noValidate>
-      <Typography align='center' color='primary' variant='h5' gutterBottom >Add a invoice </Typography>
+      <Typography align='center' color='primary' variant='h5' gutterBottom >{ editMode ? 'Edit an invoice ' : 'Add an invoice'}</Typography>
         <TextField
           id="outlined-simple-start-adornment"
           className={classNames(classes.margin, classes.textField)}
