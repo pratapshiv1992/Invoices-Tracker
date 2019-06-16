@@ -8,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { getFormattedDate , checkInteger,addInCollection ,getDocument } from './utils';
+import InfoDialog from './InfoDialog';
 
 const styles = theme => ({
   root: {
@@ -69,6 +70,10 @@ class OutlinedInputAdornments extends React.Component {
     ...defaults,
   };
 
+  handleClose=(e)=>{
+    this.setState({open:false});
+  }
+
     handleChange = prop => event => {
         const data = event.target.value
         const isIntInput =  integerValues.some(value=>value === prop)
@@ -97,8 +102,8 @@ class OutlinedInputAdornments extends React.Component {
             addInCollection('invoices',this.state);
             this.setState({
                 ...defaults,
+                open:true
             });
-            alert('Invoice added succesfully, check it out in the invoice list');
         }else{
             alert('Please fill all the fields');
         }
@@ -113,7 +118,11 @@ class OutlinedInputAdornments extends React.Component {
      deleteInvoice = (e)=>{
         const {history:{ goBack},match:{params:{id}} } = this.props;
         getDocument('invoices',id).delete();
-        goBack();
+        this.setState({
+          ...defaults,
+          open:true
+      });
+        setTimeout(goBack,2000);
      }
 
      updateInvoice = (e)=>{
@@ -121,7 +130,9 @@ class OutlinedInputAdornments extends React.Component {
       getDocument('invoices',id).update({
         ...this.state
       });
-      goBack();
+      this.setState({
+        open:true
+    });
    }
 
     componentDidMount(){
@@ -147,7 +158,8 @@ class OutlinedInputAdornments extends React.Component {
         phone,
         invoiceAmount,
         invoiceStatus, 
-        invoiceDate
+        invoiceDate,
+        open
     } = this.state;
 
     const dataCheck= customerName && phone && invoiceAmount && invoiceStatus && invoiceDate ? true : false;
@@ -239,6 +251,12 @@ class OutlinedInputAdornments extends React.Component {
         </Button> 
         
         </form>
+        <InfoDialog 
+          open={open} 
+          handleClose={this.handleClose} 
+          title={"Operation successfull"}
+          text={'Document operation has been done successfully'}
+        />
       </div>
     );
   }
