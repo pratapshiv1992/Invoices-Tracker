@@ -67,7 +67,6 @@ const defaults = {
 class OutlinedInputAdornments extends React.Component {
   state = {
     ...defaults,
-    disableFields:false,
   };
 
     handleChange = prop => event => {
@@ -117,6 +116,14 @@ class OutlinedInputAdornments extends React.Component {
         goBack();
      }
 
+     updateInvoice = (e)=>{
+      const {history:{ goBack},match:{params:{id}} } = this.props;
+      getDocument('invoices',id).update({
+        ...this.state
+      });
+      goBack();
+   }
+
     componentDidMount(){
         const { editMode } = this.props;
         if(editMode){
@@ -124,8 +131,7 @@ class OutlinedInputAdornments extends React.Component {
             getDocument('invoices',id).get().then(snap=>{
                 const document =  {...snap.data(),id:snap.id };
                 this.setState({
-                    ...document,
-                    disableFields:true
+                    ...document
                 });
             });
             
@@ -141,7 +147,6 @@ class OutlinedInputAdornments extends React.Component {
         phone,
         invoiceAmount,
         invoiceStatus, 
-        disableFields,
         invoiceDate
     } = this.state;
 
@@ -162,7 +167,6 @@ class OutlinedInputAdornments extends React.Component {
             startAdornment: <InputAdornment position="start">Mr/Mrs</InputAdornment>,
           }}
           fullWidth
-          disabled={disableFields}
         />
 
         <TextField
@@ -175,7 +179,6 @@ class OutlinedInputAdornments extends React.Component {
             startAdornment: <InputAdornment position="start">Ph</InputAdornment>,
           }}
           fullWidth
-          disabled={disableFields}
         />
 
         <TextField
@@ -189,7 +192,6 @@ class OutlinedInputAdornments extends React.Component {
             startAdornment: <InputAdornment position="start">$</InputAdornment>,
           }}
           fullWidth
-          disabled={disableFields}
         />
 
         <TextField
@@ -204,7 +206,6 @@ class OutlinedInputAdornments extends React.Component {
             startAdornment: <InputAdornment position="start">St</InputAdornment>,
           }}
           fullWidth
-          disabled={disableFields}
         >
         {ranges.map(option => (
             <MenuItem key={option.value} value={option.value}>
@@ -223,9 +224,13 @@ class OutlinedInputAdornments extends React.Component {
           shrink: true,
         }}
         onChange={this.handleChange('invoiceDate')}
-        disabled={disableFields}
         fullWidth
       />
+      { editMode && 
+        <Button fullWidth variant="contained" color="primary" className={classes.button} onClick={this.updateInvoice} disabled = {!dataCheck} >
+            {'Update '}
+        </Button>
+      }
         <Button fullWidth variant="contained" color="primary" className={classes.button} onClick={editMode ? this.deleteInvoice : this.handleSubmmit} disabled = {!dataCheck} >
             {editMode ? 'DELETE ':'ADD' }
         </Button>
