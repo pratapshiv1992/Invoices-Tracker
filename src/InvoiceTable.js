@@ -8,8 +8,46 @@ import TableCell from "@material-ui/core/TableCell";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
 import { AutoSizer, Column, SortDirection, Table } from "react-virtualized";
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
 import { readCollection } from './utils'
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+
+const InfoDialog = ({open,handleClose})=>{
+  return (
+    <div>
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">{"Edit/Delete ?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Click on a row to edit/delete it ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Got it
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
 
 const styles = theme => ({
   table: {
@@ -181,16 +219,18 @@ const CreateTable = withStyles(styles)(MyTable);
 
 class InvoiceTable extends React.PureComponent {
   state ={
-    invoiceList:[]
+    invoiceList:[],
+    open:false
   }
-  
+  //alert('Clik on a row to Edit/Delete it.');
   componentDidMount(){
     readCollection('invoices').onSnapshot(snap => {
       const dataArray = snap.docs.map(x =>({...x.data(),id:x.id}));
       this.setState({
-        invoiceList:dataArray
+        invoiceList:dataArray,
+        open:true
       });  
-      })
+      });
   }
 
   modifyInvoice = (e)=>{
@@ -198,8 +238,13 @@ class InvoiceTable extends React.PureComponent {
     push(`/edit-invoice/${e.rowData.id}`);
   }
 
+  handleClose=(e)=>{
+    console.log('-----handleClose-----');
+    this.setState({open:false});
+  }
+
   render(){
-    const { invoiceList } = this.state;
+    const { invoiceList,open } = this.state;
     return (
       <Paper style={{ height: 600, width: "100%" }}>
         <CreateTable
@@ -238,6 +283,10 @@ class InvoiceTable extends React.PureComponent {
               numeric: true
             }
           ]}
+        />
+        <InfoDialog 
+          open={open} 
+          handleClose={this.handleClose} 
         />
       </Paper>
     );
